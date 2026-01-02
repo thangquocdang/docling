@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docling-vietocr-onnx"
+version = "0.1.0"
+description = "VietOCR ONNX integration for Docling document processing"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "VietOCR ONNX Plugin Contributors"}
+]
+keywords = ["docling", "ocr", "vietocr", "onnx", "vietnamese", "document-processing"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "docling>=2.0.0",
+    "onnxruntime>=1.16.0",
+    "numpy>=1.24.0",
+    "Pillow>=9.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "onnxruntime-gpu>=1.16.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
+[project.entry-points."docling"]
+vietocr_onnx = "docling_vietocr_onnx:ocr_engines"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["docling_vietocr_onnx*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
