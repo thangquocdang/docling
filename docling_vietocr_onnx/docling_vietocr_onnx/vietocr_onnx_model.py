@@ -6,11 +6,12 @@ from typing import Iterable, List, Optional
 
 import numpy as np
 import onnxruntime
+from docling_core.types.doc import BoundingBox
 from PIL import Image
 from pydantic import BaseModel
 
 from docling.datamodel.accelerator_options import AcceleratorOptions
-from docling.datamodel.base_models import BoundingBox, Cell, OcrCell, Page
+from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
