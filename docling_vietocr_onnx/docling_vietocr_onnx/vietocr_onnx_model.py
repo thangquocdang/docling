@@ -167,7 +167,10 @@ class VietOcrOnnxModel(BaseOcrModel):
             image: PIL Image
 
         Returns:
-            Preprocessed image as numpy array
+            Preprocessed image as numpy array [B, C, H, W] with C=3 (RGB)
+
+        Note:
+            VietOCR ONNX models require RGB input (3 channels), not grayscale.
         """
         # Resize image
         w, h = image.size
@@ -180,16 +183,18 @@ class VietOcrOnnxModel(BaseOcrModel):
 
         image = image.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
-        # Convert to grayscale if needed
-        if image.mode != 'L':
-            image = image.convert('L')
+        # Convert to RGB (VietOCR ONNX requires 3 channels)
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
 
-        # Convert to numpy array and normalize
+        # Convert to numpy array and normalize [H, W, C]
         img_array = np.array(image, dtype=np.float32) / 255.0
 
-        # Add batch and channel dimensions [B, C, H, W]
-        img_array = np.expand_dims(img_array, axis=0)  # Add channel
-        img_array = np.expand_dims(img_array, axis=0)  # Add batch
+        # Transpose to [C, H, W]
+        img_array = np.transpose(img_array, (2, 0, 1))
+
+        # Add batch dimension [B, C, H, W]
+        img_array = np.expand_dims(img_array, axis=0)
 
         return img_array
 
